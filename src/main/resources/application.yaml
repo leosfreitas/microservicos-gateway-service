@@ -9,12 +9,12 @@ spring:
     gateway:
       routes:
         - id: account
-          uri: http://account:8080
+          uri: http://account:80
           predicates:
             - Path=/account/**
 
         - id: auth
-          uri: http://auth:8080
+          uri: http://auth:80
           predicates:
             - Path=/auth/**
 
