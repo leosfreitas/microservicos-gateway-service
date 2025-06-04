@@ -9,12 +9,12 @@ spring:
     gateway:
       routes:
         - id: account
-          uri: http://account:8080
+          uri: http://account:80
           predicates:
             - Path=/account/**
 
         - id: auth
-          uri: http://auth:8080
+          uri: http://auth:80
           predicates:
             - Path=/auth/**
 
@@ -27,27 +27,12 @@ spring:
           uri: http://order:8080
           predicates:
             - Path=/order/**
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-            allowedHeaders: "*"
-            exposedHeaders:
-              - "Authorization"
-              - "id-account"
-            allowCredentials: false
 
 management:
   endpoints:
     web:
       exposure:
-        include: prometheus,health,info,metrics,gateway
+        include: prometheus,health,info,metrics
   endpoint:
     prometheus:
       enabled: true
@@ -66,5 +51,3 @@ management:
 logging:
   level:
     store: ${LOGGING_LEVEL_STORE:debug}
-    org.springframework.cloud.gateway: DEBUG
-    org.springframework.web.reactive: DEBUG
