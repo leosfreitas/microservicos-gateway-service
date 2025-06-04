@@ -1,53 +1,49 @@
-server:
-  port: 8080
-
 spring:
   application:
     name: gateway
-
   cloud:
     gateway:
       routes:
-        - id: account
-          uri: http://account:80
-          predicates:
-            - Path=/account/**
-
-        - id: auth
-          uri: http://auth:80
+        - id: auth-service
+          uri: http://auth:8080
           predicates:
             - Path=/auth/**
-
-        - id: product
-          uri: http://product:8080
+        - id: store-service
+          uri: http://store:8080
           predicates:
-            - Path=/product/**
-
-        - id: order
-          uri: http://order:8080
+            - Path=/store/**
+        - id: inventory-service
+          uri: http://inventory:8080
           predicates:
-            - Path=/order/**
+            - Path=/inventory/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            exposedHeaders:
+              - "Authorization"
+              - "id-account"
+            allowCredentials: false
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    store.gateway: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web.reactive: DEBUG
 
 management:
   endpoints:
     web:
       exposure:
-        include: prometheus,health,info,metrics
-  endpoint:
-    prometheus:
-      enabled: true
-    health:
-      show-details: always
-  metrics:
-    export:
-      prometheus:
-        enabled: true
-    web:
-      server:
-        request:
-          autotime:
-            enabled: true
-
-logging:
-  level:
-    store: ${LOGGING_LEVEL_STORE:debug}
+        include: health,info,gateway
